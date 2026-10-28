@@ -1,0 +1,98 @@
+RESGATE — jogo de plataformas para FOBOS QB
+==========================================
+
+Um exemplo original inspirado no género de H.E.R.O., com três pequenas
+cavernas, jetpack, morcegos, laser, bombas e um mineiro por caverna.
+Os gráficos são próprios e estão incluídos no código BASIC.
+
+COMO ABRIR
+1. Extrai o ZIP.
+2. Abre RESGATE.BAS no FOBOS QB 1.9 para Windows e carrega em F5.
+3. Carrega em ESPAÇO no ecrã inicial.
+
+No ESP32, copia RESGATE.BAS para o cartão SD e abre-o no FOBOS QB.
+O programa destina-se ao ecrã de 640x200 e às funcionalidades do
+FOBOS QB 1.8/1.9. Não é um programa para o QBasic original da Microsoft.
+Não necessita de ficheiros de imagens nem de um executável adicional.
+
+COMANDOS
+Seta esquerda / direita: andar.
+Seta cima: voar com o jetpack; combina com esquerda ou direita.
+Espaço: disparar; podes manter a tecla premida.
+Seta baixo: colocar uma bomba, quando estiveres no chão.
+Esc: terminar e voltar ao editor.
+
+OBJETIVO E REGRAS
+Toca no mineiro amarelo, no fundo à direita. O painel passa a indicar
+VOLTA A PORTA VERDE. Regressa à porta no canto superior esquerdo.
+O mineiro fica resgatado; não aparece uma segunda personagem a seguir-te.
+Há três cavernas e três vidas para completar a missão.
+
+O combustível recarrega quando pousas numa superfície e largas CIMA.
+Evita a lava e os morcegos. Depois de perderes uma vida, regressas à
+entrada e piscas durante um curto período de proteção contra morcegos.
+Se já tinhas o mineiro, terás de o ir buscar novamente.
+
+As paredes marcadas com X são destruídas por bombas. A pedra azul não.
+Coloca a bomba no chão, perto da parede. A segunda caverna exige que abras
+uma passagem: usa a plataforma imediatamente à esquerda da parede X.
+Tens três bombas por caverna. Solta BAIXO antes de colocar outra.
+Nesta versão para aprendizagem, a explosão não magoa o jogador.
+Cada morcego vale 50 pontos; cada resgate concluído vale 500.
+Na mensagem de passagem de nível, solta e volta a premir ESPAÇO.
+
+COMO ESTUDAR O CÓDIGO
+O ficheiro está dividido em nove partes numeradas. Não utiliza GOTO.
+
+• Ciclo principal: DO / LOOP UNTIL e SELECT CASE escolhem o estado.
+• LerComandos: interpreta STICK(0), incluindo as diagonais.
+• PrepararNivel: escolhe um mapa com SELECT CASE e cria os blocos.
+• TipoCelula, Solido, Obstaculo e Sobrepoe: funções de colisão.
+• Distancia: exemplo pequeno de uma função que calcula valor absoluto.
+• MoverJogador: movimento horizontal, gravidade, jetpack e combustível.
+• AtualizarLaser e AtualizarBomba: objetos com duração limitada.
+• MoverInimigos e VerificarObjetivo: inimigos, resgate e passagem de nível.
+• DesenharSprites e DesenharPainel: apresentação dos resultados.
+
+SUB executa uma tarefa; FUNCTION devolve um resultado.
+DIM SHARED identifica os dados que vários procedimentos partilham.
+As posições e a velocidade vertical usam AS SINGLE para aceitar frações.
+As outras variáveis DIM são inteiras neste interpretador.
+A sintaxe de seleção usada pelo FOBOS QB é SELECT CASE / CASE / END SELECT.
+
+MAPAS
+Cada mapa tem 10 linhas de exatamente 20 caracteres:
+  # = pedra sólida
+  . = espaço livre
+  ~ = lava
+  X = parede destrutível
+Cada célula mede 32x16 pixels. O mapa começa na coordenada Y=24.
+Mantém as bordas fechadas, a porta livre e chão seguro por baixo do mineiro.
+
+EXERCÍCIOS PROGRESSIVOS
+1. Começa pela FUNCTION Distancia: prevê o resultado para 5, -5 e 0.
+2. Altera o movimento horizontal de 4 para 3 e compara a dificuldade.
+3. Desenha uma nova plataforma no primeiro mapa, sem mudar o seu tamanho.
+4. Altera os pontos atribuídos aos morcegos e aos resgates.
+5. Experimenta a gravidade (0.2), o limite de queda (2) e o impulso (-1.8).
+6. Cria uma quarta caverna: acrescenta CASE 4 em PrepararNivel e muda
+   a condição Nivel = 3 em VerificarObjetivo para Nivel = 4.
+
+SPRITES
+Os modelos 20 a 23 representam o jogador nas duas direções, com e sem
+chama. Os sprites 0 a 7 são os objetos desenhados durante o jogo.
+Cada carácter na sequência SPRITE DEF representa uma cor; 0 é transparente.
+Para facilitar a leitura do movimento em 640x200, os pixels dos desenhos
+foram duplicados horizontalmente. São usadas cores da paleta do FOBOS QB.
+
+NOTAS PARA O PROFESSOR
+O exemplo favorece procedimentos curtos e uma lógica direta. Não inclui
+scroll, som, editor de mapas ou controlo por joystick externo.
+A pausa é de 20 ms por imagem, além do tempo necessário para interpretar
+o código. A velocidade efetiva depende da máquina; no ESP32 pode ser menor.
+
+Validação: executado na compilação Linux do mesmo núcleo FOBOS QB 1.9,
+com comandos de teclado simulados. Verificados os dois sentidos de movimento,
+jetpack, recarga, colisões, laser, bombas, paredes, três resgates, passagem
+de nível, vitória e derrota. Não foi testado fisicamente num ESP32 nem
+executado no Windows nesta validação.
